@@ -1,22 +1,51 @@
 <!DOCTYPE><html>
-  <!-- Work in progress -->
 <head>
   <title>JavaScript V</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
+  
+  <script type="text/x-handlebars-template" id="tableTemplate">
+   <table cellspacing='12'>
+       <tr><th>Name</th><th>Major</th><th>Midterm</th><th>Final</th></tr>
+       {{#each rows}}
+            <tr>
+                <td>{{name}}</td><td>{{major}}</td><td>{{midterm}}</td><td>{{final}}</td>
+            </tr>
+       {{/each}}
+   </table>
+  </script>
+  
 </head>
+  
 <body>
-    
   <h1>Select a Major</h1>
 
   <div>
-    <button>CIT Majors</button>
-    <button>Business Majors</button>
+    <button type="button" id="citMjrButton">CIT Majors</button>
+    <button type="button" id="busMjrButton">Business Majors</button>
   </div>
 
-<script>
+  <h3>Filter students by major</h3>
+  
+  <div id="mjrTable"></div>
 
+<script>
+  window.onload = async function() {
+    var url = "cit5students.json";
+    var response = await fetch(url);
+    if (response.ok) {
+      var data = await response.json();
+
+      var tblTemp = document.getElementById("tableTemplate").innerHTML;
+      var compTblTemp = Handlebars.compile(tblTemp);
+      compHtml = compTblTemp({rows: data})
+      document.getElementById('mjrTable').innerHTML = compHTML;
+    }
+  }
   
   
 </script>
+
+
     
 </body>
 </html>

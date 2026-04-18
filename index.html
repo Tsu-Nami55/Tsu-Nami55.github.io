@@ -40,7 +40,7 @@
         }
     }
 
-    function getData(ID) {
+    async function getData(ID) {
         var url = "cit5students.json";
         var response = await fetch(url);
         if (response.ok) {

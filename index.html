@@ -26,7 +26,7 @@
 
   <h3>Filter students by major</h3>
   
-  <div id="mjrTable"></div>
+  <div id="mjrTable" style="padding-left: 5px;"></div>
 
 <script>
   window.onload = async function() {
@@ -39,6 +39,9 @@
       var compTblTemp = Handlebars.compile(tblTemp);
       compHtml = compTblTemp({rows: data})
       document.getElementById('mjrTable').innerHTML = compHtml;
+    }
+    else {
+      document.querySelector('#mjrTable').innerHTML = "Data not found.";
     }
   }
   

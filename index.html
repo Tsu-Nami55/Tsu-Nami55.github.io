@@ -4,14 +4,14 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
     <script type="text/x-handlebars-template" id="tableTemplate">
-    <table cellspacing='12'>
-        <tr><th>Name</th><th>Major</th><th>Midterm</th><th>Final</th></tr>
-        {{#each rows}}
-            <tr>
-                <td>{{name}}</td><td>{{major}}</td><td>{{midterm}}</td><td>{{final}}</td>
-            </tr>
-        {{/each}}
-    </table>
+        <table cellspacing='12'>
+            <tr><th>Name</th><th>Major</th><th>Midterm</th><th>Final</th></tr>
+            {{#each rows}}
+                <tr>
+                    <td>{{name}}</td><td>{{major}}</td><td>{{midterm}}</td><td>{{final}}</td>
+                </tr>
+            {{/each}}
+        </table>
     </script>
 </head>
   
@@ -22,20 +22,48 @@
       <button type="button" id="citMjrButton">CIT Majors</button>
       <button type="button" id="busMjrButton">Business Majors</button>
    </div>
-
+    
      <h3>Filter students by major</h3>
   
     <div id="mjrTable" style="padding-left: 5px;"></div>
 
-<script src = 'mainScript.js'></script>
-
 <script>
-    
-    
-  
+    window.onload = async function() {
+        var buttonID;
+        document.getElementById("citMjrButton").onclick = function() {
+            buttonID = "CIT";
+            getData(buttonID);
+        }
+        document.getElementById("busMjrButton").onclick = function() {
+            buttonID = "BUS";
+            getData(buttonID);
+        }
+    }
+
+    async function getData(ID) {
+        var url = "cit5students.json";
+        var response = await fetch(url);
+        if (response.ok) {
+      
+            var data = await response.json();
+
+            if (ID == "CIT") {
+                var filter = data.filter((data) => data.major == "CIT");
+            }
+            else if (ID == "BUS") {
+                var filter = data.filter((data) => data.major == "BUS");
+            }
+            
+            var tblTemp = document.getElementById("tableTemplate").innerHTML;
+            var compTblTemp = Handlebars.compile(tblTemp);
+            compHtml = compTblTemp({rows: filter})
+            document.getElementById('mjrTable').innerHTML = compHtml;
+        }
+        else {
+          document.querySelector('#mjrTable').innerHTML = "Data not found.";
+        }
+    }
 </script>
-
-
     
 </body>
 </html>

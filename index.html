@@ -1,148 +1,74 @@
-<!DOCTYPE><html>
-<head>
-    <title>JavaScript V</title>
+<!DOCTYPE html>
+<html><head><title>speeding tickets</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-	<!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
-    <script type="text/x-handlebars-template" id="tableTemplate">
-        <table cellspacing='12'>
-            <tr><th>Name</th><th>Major</th><th>Midterm</th><th>Final</th></tr>
-            {{#each rows}}
-                <tr>
-                    <td>{{name}}</td><td>{{major}}</td><td>{{midterm}}</td><td>{{final}}</td>
-                </tr>
-            {{/each}}
-        </table>
-		
-    </script>
-	
-	<!-- Styling -->
-    <style>
-		body{
-			font-family: verdana;
-			padding-left: 5px; 
-		}
-		p{color: #250030;}
-		.paddingTop{padding-top: 100px;}
-		.paddingBottom{padding-bottom: 100px;}
-		header{
-			font-family: verdana;
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			background: linear-gradient(to right, #00d181, cyan);
-			color: white;
-			border-bottom-style: solid;
-			border-bottom-color: lightgray;
-			border-bottom-width: 5px;
-		}
-		.h1Header{
-			font-family: verdana;
-			padding-left: 20px;
-		}
-		.pHeader{
-			border-bottom-style: solid;
-			border-bottom-color: white;
-			border-bottom-width: 3px;
-		}
-		footer{
-			position: fixed;
-			bottom: 0;
-			right: 0;
-			width: 100%;
-			background: black;
-		}
-		.pFooter{
-			font-family: verdana;
-			font-size: 16px;
-			padding-left: 10px;
-			color: lightgray;
-			padding-top: 5px;
-			padding-bottom: 5px;
-		}
-		button{
-			font-weight: bold;
-			border-style: outset;
-			border-color: #00d181;
-			border-width: 4px;
-			border-radius: 2.5px;
-			background-color: #00d181;
-			color: white;
-			cursor: pointer;
-		}
-		button:active{
-			border-style: inset;
-			background-color: #02a869;
-			color: whitesmoke;
-		}
-		
-</style>
+ <script src="https://unpkg.com/vue@next"></script> 
+
 </head>
-  
 <body>
-    <!-- Header -->
-	<header>
-		<h1 class="h1Header">Select a Major</h1>
-		<p class="pHeader"></p>
-    </header>
 
-    <!-- Padding -->
-	<p class="paddingTop"></p>
+<div class="container">
+<nav class="navbar navbar-inverse">
 
-	<h3>Filter students by major</h3>
-	
-	<!-- Buttons -->
+    <div class="navbar-header">
+        <a class="navbar-brand" href="#">Our Website</a>
+    </div>
     <div>
-      <button type="button" id="citMjrButton">CIT Majors</button>
-      <button type="button" id="busMjrButton">Business Majors</button>
-	</div>
-	
-    <div id="mjrTable" style="padding-left: 15px;"></div>
+       <ul class="nav navbar-nav">
+           <li class="active"><a href="index.html">All Tickets</a></li>
+           <li><a href="25over.html">25mph or move over</a></li>
+       </ul>
+    </div>
+
+</nav>    <!-- end nav-bar -->
+
+<div id="ticketApp">
+
+     <h2>Tickets July 4, 2014, Minneapolis/St. Paul</h2>
+          
+          <table class="table table-bordered table-striped">
+              <tr>
+                  <th>Ticket ID</th>
+                  <th>Time</th>
+                  <th>Posted Speed</th>
+                  <th>MPH Over</th>
+                  <th>Violator Sex</th>
+              </tr>
+              <tr v-for = "ticket in tickets">
+                  <td>{{ticket.tid}}</td>
+                  <td>{{ticket.stop_time}}</td>
+                  <td>{{ticket.posted_speed}}</td>
+                  <td>{{ticket.actual_speed - ticket.posted_speed}}</td> 
+                  <td>{{ticket.violator_sex}}</td>
+              </tr>
+         </table>
+  
+</div>   <!-- end gpaApp -->
+</div>   <!-- end class= 'container' -->
 
 <script>
-    window.onload = async function() {
-        var buttonID;
-        document.getElementById("citMjrButton").onclick = function() {
-            buttonID = "CIT";
-            getData(buttonID);
-        }
-        document.getElementById("busMjrButton").onclick = function() {
-            buttonID = "BUS";
-            getData(buttonID);
-        }
-    }
-
-    async function getData(ID) {
-        var url = "cit5students.json";
-        var response = await fetch(url);
-        if (response.ok) {
+       let app = Vue.createApp({
+            data() {     // returns an object of data
+                return {
+                    tickets: [],           // array to hold student data
+                }
+            },
+            created() {      // section executes as page loads
+                this.getData()  // load json data as page loads
+            },
+            methods: {    // ajax request
+                async getData() {
+                    const response = await fetch('tickets1.json')
+                    this.tickets = await response.json()
+                    //tickets = data.filter( (item) => item.major == majSelect );     
+                },
+            }
+          })
       
-            var data = await response.json();
+      app.mount('#ticketApp')   //in which div to mount the vue app
+		  
 
-            if (ID == "CIT") {
-                var filter = data.filter((data) => data.major == "CIT");
-            }
-            else if (ID == "BUS") {
-                var filter = data.filter((data) => data.major == "BUS");
-            }
-            
-            var tblTemp = document.getElementById("tableTemplate").innerHTML;
-            var compTblTemp = Handlebars.compile(tblTemp);
-            compHtml = compTblTemp({rows: filter})
-            document.getElementById('mjrTable').innerHTML = compHtml;
-        }
-        else {
-          document.querySelector('#mjrTable').innerHTML = "Data not found.";
-        }
-    }
-	
 </script>
-	<!-- Padding -->
-	<p class="paddingBottom"></p>
-	
-    <!-- Footer -->
-	<footer><p class="pFooter">CIT 140: JavaScript I - Program V</p></footer>
-        
-</body>
-</html>
+</body></html>

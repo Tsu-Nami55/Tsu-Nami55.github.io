@@ -36,7 +36,7 @@
                   <th>MPH Over</th>
                   <th>Violator Sex</th>
               </tr>
-              <tr v-for = "ticket in tickets">
+              <tr v-for = "(ticket, index) in tickets" :key="ticket.tid">
                   <td>{{ticket.tid}}</td>
                   <td>{{ticket.stop_time}}</td>
                   <td>{{ticket.posted_speed}}</td>
@@ -45,7 +45,7 @@
               </tr>
          </table>
   
-</div>   <!-- end gpaApp -->
+</div>   <!-- end ticketApp -->
 </div>   <!-- end class= 'container' -->
 
 <script>

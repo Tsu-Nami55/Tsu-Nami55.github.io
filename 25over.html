@@ -17,8 +17,8 @@
     </div>
     <div>
        <ul class="nav navbar-nav">
-           <li><a href="index.html">All Tickets</a></li>
-           <li class="active"><a href="25over.html">25mph or more over</a></li>
+           <li class="active"><a href="index.html">All Tickets</a></li>
+           <li><a href="25over.html">25mph or more over</a></li>
        </ul>
     </div>
 
@@ -27,7 +27,7 @@
 <div id="ticketApp">
 
      <h2>Tickets July 4, 2014, Minneapolis/St. Paul</h2>
-	 <h1>Tickets 25mph or more over the limit</h1>
+	 <h4>Tickets 25mph or more over the limit</h4>
           
           <table class="table table-bordered table-striped">
               <tr>
@@ -63,7 +63,7 @@
                 async getData() {
                     const response = await fetch('tickets1.json')
                     this.tickets = await response.json()
-                    tickets = data.filter( (item) => (ticket.actual_speed - ticket.posted_speed) >= 25);     
+                    tickets = data.filter( (ticket) => (ticket.actual_speed - ticket.posted_speed) >= 25);     
                 },
             }
           })

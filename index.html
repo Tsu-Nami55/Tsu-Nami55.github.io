@@ -4,7 +4,7 @@
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
- <script src="https://unpkg.com/vue@next"></script> 
+ <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> 
 
 </head>
 <body>
@@ -36,7 +36,7 @@
                   <th>MPH Over</th>
                   <th>Violator Sex</th>
               </tr>
-              <tr v-for = "(ticket, index) in tickets" :key="ticket.tid">
+              <tr v-for = "ticket in tickets">
                   <td>{{ticket.tid}}</td>
                   <td>{{ticket.stop_time}}</td>
                   <td>{{ticket.posted_speed}}</td>
